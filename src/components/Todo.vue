@@ -32,6 +32,11 @@
           </div>
         </li>
       </ul>
+      <div class="button_wrapper">
+        <button class="purge_button" v-on:click="purgeItem()">
+          完了したタスクを削除
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -54,11 +59,21 @@ export default {
       };
       this.todos.push(todo);
       this.newItem = "";
-      this.newDate=today;
+      this.newDate = today;
     },
     deleteItem: function (key) {
       if (confirm("Are you sure?")) {
         this.todos.splice(key, 1);
+      }
+    },
+    purgeItem: function () {
+      if (confirm("Are you sure?")) {
+        this.todos.forEach((todo, key) => {
+          if (todo.isDone === true) {
+            // console.log(todo.item);
+            this.todos.splice(key, 1);
+          }
+        });
       }
     },
   },
