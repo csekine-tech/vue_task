@@ -22,6 +22,9 @@
               <span>{{ todo.item }}</span>
               <span class="todo_date">期限:{{ todo.date }}</span>
             </span>
+            <button v-on:click="deleteItem(key)" class="delete_button">
+              X
+            </button>
           </div>
         </li>
       </ul>
@@ -47,17 +50,22 @@ export default {
       this.todos.push(todo);
       this.newItem = "";
     },
+    deleteItem: function (key) {
+      if (confirm("Are you sure?")) {
+        this.todos.splice(key, 1);
+      }
+    },
   },
 };
 </script>
 
 <style>
-.container{
-    width: 350px;
+.container {
+  width: 350px;
 }
-.container_wrapper{
-    display: flex;
-    justify-content: center;
+.container_wrapper {
+  display: flex;
+  justify-content: center;
 }
 ul {
   list-style: none;
@@ -81,11 +89,17 @@ button {
   cursor: pointer;
   font-size: 16px;
 }
-.button_wrapper{
-display: flex;
-justify-content: right;
+.button_wrapper {
+  display: flex;
+  justify-content: right;
 }
-
+.delete_button {
+  padding: 8px;
+  font-size: 12px;
+}
+.line {
+  margin-bottom: 10px;
+}
 input[type="checkbox"]:checked + span {
   text-decoration: line-through;
 }
