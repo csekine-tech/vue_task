@@ -33,7 +33,7 @@
         </li>
       </ul>
       <div class="button_wrapper">
-        <button class="purge_button" v-on:click="purgeItem()">
+        <button class="purge_button" v-on:click="purgeItem()" v-if="todos.length">
           完了したタスクを削除
         </button>
       </div>
@@ -69,6 +69,7 @@ export default {
       }
     },
     purgeItem: function () {
+      if (this.todos === "") return;
       if (confirm("Are you sure?")) {
         this.todos.forEach((todo, key) => {
           if (todo.isDone === true) {
