@@ -65,15 +65,18 @@ export default {
     },
     deleteItem: function (key) {
       if (confirm("Are you sure?")) {
-        this.todos.splice(key, 1);
+        this.todos.splice(length-key-1, 1);
+        this.reverseTodos = this.todos.slice().reverse();
       }
     },
     purgeItem: function () {
-      if (this.todos === "") return;
+      if (!this.todos.length) return;
       if (confirm("Are you sure?")) {
         this.todos.forEach((todo, key) => {
           if (todo.isDone === true) {
             this.todos.splice(key, 1);
+            this.reverseTodos = this.todos.slice().reverse();
+            console.log(key);
           }
         });
       }
