@@ -16,12 +16,16 @@
       </form>
       <ul>
         <li v-for="(todo, key) in todos" :key="key">
-          <div class="line">
-            <input type="checkbox" v-model="todo.isDone" />
-            <span>
-              <span>{{ todo.item }}</span>
-              <span class="todo_date">期限:{{ todo.date }}</span>
-            </span>
+          <div class="line_wrapper">
+            <div class="line">
+              <input type="checkbox" v-model="todo.isDone" />
+              <span>
+                <span>{{ todo.item }}</span>
+                <span v-if="todo.date" class="todo_date"
+                  >{{ todo.date }}まで</span
+                >
+              </span>
+            </div>
             <button v-on:click="deleteItem(key)" class="delete_button">
               X
             </button>
@@ -33,6 +37,7 @@
 </template>
 
 <script>
+// const date=new date();
 export default {
   data: () => ({
     newItem: "",
@@ -97,7 +102,10 @@ button {
   padding: 8px;
   font-size: 12px;
 }
-.line {
+
+.line_wrapper{
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 input[type="checkbox"]:checked + span {
