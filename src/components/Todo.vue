@@ -15,7 +15,7 @@
         </div>
       </form>
       <ul>
-        <li v-for="(todo, key) in todos" :key="key">
+        <li v-for="(todo, key) in reverseTodos" :key="key">
           <div class="line_wrapper">
             <div class="line">
               <input type="checkbox" v-model="todo.isDone" />
@@ -48,6 +48,7 @@ export default {
     newItem: "",
     newDate: today,
     todos: [],
+    reverseTodos:[]
   }),
   methods: {
     addItem: function () {
@@ -58,6 +59,7 @@ export default {
         date: this.newDate,
       };
       this.todos.push(todo);
+      this.reverseTodos = this.todos.slice().reverse();
       this.newItem = "";
       this.newDate = today;
     },
@@ -70,7 +72,6 @@ export default {
       if (confirm("Are you sure?")) {
         this.todos.forEach((todo, key) => {
           if (todo.isDone === true) {
-            // console.log(todo.item);
             this.todos.splice(key, 1);
           }
         });
