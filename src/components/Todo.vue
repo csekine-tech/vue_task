@@ -37,11 +37,11 @@
 </template>
 
 <script>
-// const date=new date();
+const today = new Date().toISOString().slice(0, 10);
 export default {
   data: () => ({
     newItem: "",
-    newDate: "",
+    newDate: today,
     todos: [],
   }),
   methods: {
@@ -54,6 +54,7 @@ export default {
       };
       this.todos.push(todo);
       this.newItem = "";
+      this.newDate=today;
     },
     deleteItem: function (key) {
       if (confirm("Are you sure?")) {
@@ -103,7 +104,7 @@ button {
   font-size: 12px;
 }
 
-.line_wrapper{
+.line_wrapper {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
