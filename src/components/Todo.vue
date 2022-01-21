@@ -21,9 +21,33 @@
               <input type="checkbox" v-model="todo.isDone" />
               <span>
                 <span>{{ todo.item }}</span>
-                <span v-if="todo.date" class="todo_date"
-                  >{{ todo.date }}まで</span
-                >
+                <span v-if="todo.remainDay < -365" class="todo_date red">
+                  {{ absNumber(todo.remainYear) }}年前
+                </span>
+                <span v-else-if="todo.remainDay < -30" class="todo_date red" >
+                  {{ absNumber(todo.remainMonth) }}カ月前
+                </span>
+                <span v-else-if="todo.remainDay < -1" class="todo_date red">
+                  {{ absNumber(todo.remainDay) }}日前
+                </span>
+                <span v-else-if="todo.remainDay === -1" class="todo_date red">
+                  昨日
+                </span>
+                <span v-else-if="todo.remainDay === 0" class="todo_date red">
+                  今日
+                </span>
+                <span v-else-if="todo.remainDay === 1" class="todo_date">
+                  明日
+                </span>
+                <span v-else-if="todo.remainDay > 365" class="todo_date">
+                  {{ todo.remainYear }}年後
+                </span>
+                <span v-else-if="todo.remainDay > 30" class="todo_date">
+                  {{ todo.remainMonth }}カ月後
+                </span>
+                <span v-else-if="todo.remainDay > 1" class="todo_date">
+                  {{ todo.remainDay }}日後
+                </span>
               </span>
             </div>
             <button v-on:click="deleteItem(key)" class="delete_button">
@@ -33,7 +57,11 @@
         </li>
       </ul>
       <div class="button_wrapper">
-        <button class="purge_button" v-on:click="purgeItem()" v-if="todos.length">
+        <button
+          class="purge_button"
+          v-on:click="purgeItem()"
+          v-if="todos.length"
+        >
           完了したタスクを削除
         </button>
       </div>
@@ -48,7 +76,8 @@ export default {
     newItem: "",
     newDate: today,
     todos: [],
-    reverseTodos:[]
+    reverseTodos: [],
+    // remainDay: [],
   }),
   methods: {
     addItem: function () {
@@ -57,15 +86,24 @@ export default {
         item: this.newItem,
         isDone: false,
         date: this.newDate,
+        remainDay: this.remainDay,
+        remainMonth: this.remainDay / 30,
+        remainYear: this.remainDay / 365,
       };
+      var todayTime = new Date(today);
+      var newDateTime = new Date(this.newDate);
+      todo.remainDay = (newDateTime - todayTime) / 86400000;
+      todo.remainMonth = Math.ceil((newDateTime - todayTime) / 86400000 / 30);
+      todo.remainYear = Math.ceil((newDateTime - todayTime) / 86400000 / 365);
       this.todos.push(todo);
       this.reverseTodos = this.todos.slice().reverse();
       this.newItem = "";
+      console.log(this.remainDay);
       this.newDate = today;
     },
     deleteItem: function (key) {
       if (confirm("Are you sure?")) {
-        this.todos.splice(length-key-1, 1);
+        this.todos.splice(length - key - 1, 1);
         this.reverseTodos = this.todos.slice().reverse();
       }
     },
@@ -81,6 +119,9 @@ export default {
         });
       }
     },
+    absNumber: function (num) {
+      return Math.abs(num);
+    },
   },
 };
 </script>
@@ -92,6 +133,9 @@ export default {
 .container_wrapper {
   display: flex;
   justify-content: center;
+}
+.red{
+  color: red;
 }
 ul {
   list-style: none;
